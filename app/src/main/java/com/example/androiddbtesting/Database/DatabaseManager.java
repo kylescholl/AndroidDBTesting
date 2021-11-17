@@ -23,17 +23,17 @@ public class DatabaseManager {
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
         db.execSQL("DROP TABLE IF EXISTS LocationTable;");
-        db.execSQL("CREATE TABLE IF NOT EXISTS LocationTable (COMPASS_HEADING VARCHAR, RSSI INT(3));");
+        db.execSQL("CREATE TABLE IF NOT EXISTS LocationTable (ITEM_NAME VARCHAR, COMPASS_HEADING VARCHAR, RSSI INT(3));");
 
         db.close();
     }
 
-    public void logInfo(Context context, String COMPASS_HEADING, int RSSI) {
+    public void logInfo(Context context, String ITEM_NAME, String COMPASS_HEADING, int RSSI) {
         Log.i("Method Call", "logInfo()");
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
-        String query = String.format("INSERT INTO LocationTable VALUES ('%s', %s);", COMPASS_HEADING, RSSI);
+        String query = String.format("INSERT INTO LocationTable VALUES ('%s', '%s', %s);", ITEM_NAME, COMPASS_HEADING, RSSI);
         db.execSQL(query);
 
         db.close();
@@ -45,17 +45,23 @@ public class DatabaseManager {
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
         Cursor c = db.rawQuery("Select * FROM LocationTable;", null);
 
+        ArrayList<String> name_list = new ArrayList<>();
         ArrayList<String> heading_list = new ArrayList<>();
         ArrayList<String> rssi_list = new ArrayList<>();
 
         c.moveToFirst();
         while(!c.isAfterLast()) {
+            String name = c.getString(c.getColumnIndexOrThrow("ITEM_NAME"));
             String heading = c.getString(c.getColumnIndexOrThrow("COMPASS_HEADING"));
             String rssi = c.getString(c.getColumnIndexOrThrow("RSSI"));
 
+            /*
+            Log.i("name", name);
             Log.i("heading", heading);
             Log.i("rssi", rssi);
+             */
 
+            name_list.add(name);
             heading_list.add(heading);
             rssi_list.add(rssi);
 
@@ -64,14 +70,15 @@ public class DatabaseManager {
         c.close();
         db.close();
 
-        Log.i("","");
-        for (String head_:heading_list) {
-            Log.i("head_", head_);
-        }
+        String out = "";
+        for (int i = 0; i < heading_list.size(); i++) {
 
-        Log.i("","");
-        for (String rssi_:rssi_list) {
-            Log.i("rssi_", rssi_);
+            String n = name_list.get(i);
+            String h = heading_list.get(i);
+            String r = rssi_list.get(i);
+
+            out = String.format("['%s', '%s', %s]", n, h, r);
+            Log.i("row", out);
         }
     }
 }
