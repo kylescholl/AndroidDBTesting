@@ -27,12 +27,12 @@ public class DatabaseManager {
         db.close();
     }
 
-    public void logInfo(Context context, int RSSI_VAL, String COMPASS_HEADING) {
+    public void logInfo(Context context, int RSSI, String COMPASS_HEADING) {
         Log.i("Method Call", "logInfo()");
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
-        String query = String.format("Insert into LocationTable VALUES (%s, '%s');", RSSI_VAL, COMPASS_HEADING);
+        String query = String.format("Insert into LocationTable VALUES (%s, '%s');", RSSI, COMPASS_HEADING);
         db.execSQL(query);
 
         db.close();
