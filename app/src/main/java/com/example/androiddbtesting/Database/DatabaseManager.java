@@ -7,6 +7,7 @@ import android.database.*;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class DatabaseManager {
@@ -21,18 +22,18 @@ public class DatabaseManager {
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
-        db.execSQL("Drop table if exists LocationTable;");
-        db.execSQL("Create table if not exists LocationTable (RSSI INT(3), COMPASS_HEADING VARCHAR);");
+        db.execSQL("DROP TABLE IF EXISTS LocationTable;");
+        db.execSQL("CREATE TABLE IF NOT EXISTS LocationTable (COMPASS_HEADING VARCHAR, RSSI INT(3));");
 
         db.close();
     }
 
-    public void logInfo(Context context, int RSSI, String COMPASS_HEADING) {
+    public void logInfo(Context context, String COMPASS_HEADING, int RSSI) {
         Log.i("Method Call", "logInfo()");
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
-        String query = String.format("Insert into LocationTable VALUES (%s, '%s');", RSSI, COMPASS_HEADING);
+        String query = String.format("INSERT INTO LocationTable VALUES ('%s', %s);", COMPASS_HEADING, RSSI);
         db.execSQL(query);
 
         db.close();
@@ -40,35 +41,39 @@ public class DatabaseManager {
 
     public void readDatabase(Context context) {
         Log.i("Method Call", "logInfo()");
-        db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
-        // on below line we are creating a cursor with query to read data from database.
+        db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
         Cursor c = db.rawQuery("Select * FROM LocationTable;", null);
 
-        // on below line we are creating a new array list.
-        ArrayList<Object> db_list = new ArrayList<>();
+        ArrayList<String> heading_list = new ArrayList<>();
+        ArrayList<String> rssi_list = new ArrayList<>();
 
-        Log.i("!!!!!!!!!!!!!!!!!!!!!!", "!!!!!!!!!!!!!!!!!!!!1");
+        int count_ = 0;
 
         c.moveToFirst();
         while(!c.isAfterLast()) {
-            db_list.add(c.getString(c.getColumnIndexOrThrow("COMPASS_HEADING"))); //add the item
+            String heading = c.getString(c.getColumnIndexOrThrow("COMPASS_HEADING"));
+            String rssi = c.getString(c.getColumnIndexOrThrow("RSSI"));
+
+            Log.i("heading", heading);
+            Log.i("rssi", rssi);
+
+            heading_list.add(heading);
+            rssi_list.add(rssi);
+
+            //            db_list.add(c.getString(c.getColumnIndexOrThrow("COMPASS_HEADING"))); //add the item
             c.moveToNext();
+//            Log.i("count_", Integer.toString(count_));
+            count_++;
         }
 
-        // moving our cursor to first position.
         if (c.moveToFirst()) {
             do {
                 Log.i("Cursor Info", c.toString());
-                db_list.add(c.toString());
+//                db_list.add(c.toString());
             } while (c.moveToNext());
-            // moving our cursor to next.
         }
-        // at last closing our cursor
-        // and returning our array list.
         c.close();
-
-        Log.i("!!!!!!!!!!!!!!!!!!!!!!", "!!!!!!!!!!!!!!!!!!!!1");
 
 //        Log.i("!!!!!!!", db_list.size());
 //
