@@ -48,8 +48,6 @@ public class DatabaseManager {
         ArrayList<String> heading_list = new ArrayList<>();
         ArrayList<String> rssi_list = new ArrayList<>();
 
-        int count_ = 0;
-
         c.moveToFirst();
         while(!c.isAfterLast()) {
             String heading = c.getString(c.getColumnIndexOrThrow("COMPASS_HEADING"));
@@ -61,30 +59,20 @@ public class DatabaseManager {
             heading_list.add(heading);
             rssi_list.add(rssi);
 
-            //            db_list.add(c.getString(c.getColumnIndexOrThrow("COMPASS_HEADING"))); //add the item
             c.moveToNext();
-//            Log.i("count_", Integer.toString(count_));
-            count_++;
-        }
-
-        if (c.moveToFirst()) {
-            do {
-                Log.i("Cursor Info", c.toString());
-//                db_list.add(c.toString());
-            } while (c.moveToNext());
         }
         c.close();
-
-//        Log.i("!!!!!!!", db_list.size());
-//
-//        ContentValues cv = new ContentValues();
-//        cv.put(FeedEntry.COLUMN_NAME.);
-
-        Cursor c2 = db.rawQuery("Select * FROM LocationTable;", null);
-        c2.moveToFirst();
-        Log.d("COMPASS_HEADING", c2.getString(c2.getColumnIndexOrThrow("COMPASS_HEADING")));
-
         db.close();
+
+        Log.i("","");
+        for (String head_:heading_list) {
+            Log.i("head_", head_);
+        }
+
+        Log.i("","");
+        for (String rssi_:rssi_list) {
+            Log.i("rssi_", rssi_);
+        }
     }
 }
 
