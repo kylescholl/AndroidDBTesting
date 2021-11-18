@@ -20,10 +20,10 @@ public class MainActivity extends AppCompatActivity {
         databaseManager.createDatabase(getApplicationContext());
 
         // Log location info to database
-        databaseManager.logInfo(getApplicationContext(), "Backpack", "North", -50);
-        databaseManager.logInfo(getApplicationContext(), "Fire Extinguisher", "East", -30);
-        databaseManager.logInfo(getApplicationContext(), "Helmet", "South", 20);
-        databaseManager.logInfo(getApplicationContext(), "Person", "West", 45);
+        databaseManager.logInfo(getApplicationContext(), "Backpack", "North", -50, 200);
+        databaseManager.logInfo(getApplicationContext(), "Fire Extinguisher", "East", -30, 245);
+        databaseManager.logInfo(getApplicationContext(), "Helmet", "South", 20, 1500);
+        databaseManager.logInfo(getApplicationContext(), "Person", "West", 45, 910);
 
         // Read from database
         databaseManager.readDatabase(getApplicationContext());
