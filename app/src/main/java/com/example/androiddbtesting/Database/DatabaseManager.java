@@ -21,7 +21,7 @@ public class DatabaseManager {
     String table_name = "";
 
     public void createDatabase(Context context){
-        Log.i("Method Call", "createDatabase()");
+        Log.d("Method Call", "createDatabase()");
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
@@ -32,7 +32,7 @@ public class DatabaseManager {
     }
 
     public void logInfo(Context context, String ITEM_NAME, String COMPASS_HEADING, int RSSI, int TIME) {
-        Log.i("Method Call", "logInfo()");
+        Log.d("Method Call", "logInfo()");
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
 
@@ -43,7 +43,7 @@ public class DatabaseManager {
     }
 
     public void readDatabase(Context context) {
-        Log.i("Method Call", "logInfo()");
+        Log.d("Method Call", "logInfo()");
 
         db = context.openOrCreateDatabase("LocationDB", context.MODE_PRIVATE, null);
         Cursor c = db.rawQuery("Select * FROM LocationTable;", null);
